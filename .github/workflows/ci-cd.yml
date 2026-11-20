@@ -1,3 +1,4 @@
+
 name: MLOps CI/CD Pipeline
 
 on:
@@ -12,6 +13,7 @@ jobs:
   test:
     name: Test ML Application
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -27,19 +29,23 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run Unit Tests
-        run: |
-          pytest -v
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+        run: python -m pytest -v
 
   deploy:
     name: Deploy Application
     needs: test
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+
       - name: Deployment Simulation
+      
         run: |
           echo "Deployment started..."
           echo "ML application deployed successfully."
